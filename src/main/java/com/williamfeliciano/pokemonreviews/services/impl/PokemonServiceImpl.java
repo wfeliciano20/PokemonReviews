@@ -7,6 +7,9 @@ import com.williamfeliciano.pokemonreviews.services.PokemonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
 @Service
 @RequiredArgsConstructor
 public class PokemonServiceImpl implements PokemonService {
@@ -15,9 +18,30 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public PokemonDTO createPokemon(PokemonDTO pokemonDTO) {
-        Pokemon pokemon;
-        pokemon = pokemonDTO.toPokemon(pokemonDTO);
+        Pokemon pokemon = mapToEntity(pokemonDTO);
         Pokemon savedPokemon = pokemonRepository.save(pokemon);
-        return pokemonDTO.fromPokemon(savedPokemon);
+        return mapToDTO(savedPokemon);
+    }
+
+    @Override
+    public List<PokemonDTO> getAllPokemon() {
+        List<Pokemon> allPokemon = pokemonRepository.findAll();
+        return allPokemon.stream().map(this::mapToDTO).toList();
+    }
+
+
+    private PokemonDTO mapToDTO(Pokemon pokemon) {
+        PokemonDTO dto= new PokemonDTO();
+        dto.setId(pokemon.getId());
+        dto.setName(pokemon.getName());
+        dto.setType(pokemon.getType());
+        return dto;
+    }
+
+    private Pokemon mapToEntity(PokemonDTO dto) {
+        Pokemon pokemon = new Pokemon();
+        pokemon.setName(dto.getName());
+        pokemon.setType(dto.getType());
+        return pokemon;
     }
 }

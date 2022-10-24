@@ -19,11 +19,8 @@ public class PokemonController {
     private final PokemonService pokemonService;
 
     @GetMapping("pokemon")
-    public ResponseEntity<List<Pokemon>> getPokemon(){
-        List<Pokemon> pokemons = new ArrayList<>();
-        pokemons.add(new Pokemon(1,"bulbasaur","grass"));
-        pokemons.add(new Pokemon(4,"squirtle","water"));
-        pokemons.add(new Pokemon(7,"charmander","fire"));
+    public ResponseEntity<List<PokemonDTO>> getPokemon(){
+        List<PokemonDTO> pokemons = pokemonService.getAllPokemon();
         return ResponseEntity.ok().body(pokemons);
     }
 

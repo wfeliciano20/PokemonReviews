@@ -1,6 +1,9 @@
 package com.williamfeliciano.pokemonreviews.controllers;
 
+import com.williamfeliciano.pokemonreviews.dto.PokemonDTO;
 import com.williamfeliciano.pokemonreviews.models.Pokemon;
+import com.williamfeliciano.pokemonreviews.services.PokemonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +13,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/")
+@RequiredArgsConstructor
 public class PokemonController {
+
+    private final PokemonService pokemonService;
 
     @GetMapping("pokemon")
     public ResponseEntity<List<Pokemon>> getPokemon(){
@@ -33,8 +39,8 @@ public class PokemonController {
     }
 
     @PostMapping("pokemon/create")
-    public ResponseEntity<Pokemon> createPokemon(@RequestBody Pokemon pokemon){
-        return new ResponseEntity<>(pokemon,HttpStatus.CREATED);
+    public ResponseEntity<PokemonDTO> createPokemon(@RequestBody PokemonDTO pokemonDTO){
+        return new ResponseEntity<>(pokemonService.createPokemon(pokemonDTO),HttpStatus.CREATED);
     }
 
     @PutMapping("pokemon/{id}/update")
